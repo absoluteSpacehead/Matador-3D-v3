@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: a896449c277e6c74e96c20da3e473c8d
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _MainTex: {instanceID: 0}
+  - MultTex: {fileID: 2800000, guid: 0bc874a1218d5e246bdb2c201cc9ae3d, type: 3}
+  - WiggleWaggle: {fileID: 2800000, guid: b1ef81c66cb7edd4dbf1e9ecde539e31, type: 3}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
