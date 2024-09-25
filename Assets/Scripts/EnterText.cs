@@ -5,181 +5,174 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+// 2024 note: what the fuck is this man
+[RequireComponent(typeof(Image), typeof(AudioSource))]
 public class EnterText : MonoBehaviour
 {
+    private string _currentName;
+    private int _x = 1;
+    private int _y = -1;
+    private RectTransform _transform;
+    private TextMeshProUGUI _text;
+    private AudioSource _audioSource1;
+    private AudioSource _audioSource2;
+    private AudioSource _audioSource3;
+    private AudioSource _audioSource4;
+    [SerializeField]
+    private AudioClip _audioClip2;
+    [SerializeField]
+    private AudioClip _audioClip3;
+    private Image _image;
+    private Image _darkImage;
+    private Animator _animator;
+    private TextMeshProUGUI _fileText;
+    private AudioSource _audioSource5;
+    private RectTransform _fileParentTransform;
+    private Animator _cameraAnimator;
 
-    public string Name;
-    public int x = 1;
-    public int y = -1;
-    RectTransform trans;
-    TextMeshProUGUI text;
-    AudioSource sound1;
-    AudioSource sound2;
-    AudioSource sound3;
-    AudioSource sound4;
-    public AudioClip sound2clip;
-    public AudioClip sound3clip;
-    public AudioClip sound5clip;
-    public Image image;
-    public Image DarkBoxImage;
-    public string test;
-    public float test2;
-    Animator animator;
-    TextMeshProUGUI FileText;
-    AudioSource aniamtor2;
-    RectTransform FileParentTrans;
-    Animator CameraAnimator;
+    private bool _nameBoxReady = false;
+    private bool _alphaReady = false;
+    private bool _volumeReady = false;
 
-    public bool NameBoxReady = false;
-    public bool AlphaReady = false;
-    public bool VolumeReady = false;
+    private Fader _fader;
 
-    fade fadeScript;
-
+    // ??????
     readonly string[,] characters = new string[,] { { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M" }, { "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" }, { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m" }, { "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" }, { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " ", ".", "!" }, { "?", ",", ";", ":", '"'.ToString(), "'", "(", ")", "/", "-", "+", "dummy", " " } };
 
-    RectTransform LightBoxTrans;
-    RectTransform DarkBoxTrans;
+    private RectTransform _lightBoxTransform;
+    private RectTransform _darkBoxTransform;
 
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        trans = GetComponent<RectTransform>();
-        text = GameObject.Find("FileNameText").GetComponent<TextMeshProUGUI>();
-        LightBoxTrans = GameObject.Find("TextBox").GetComponent<RectTransform>();
-        DarkBoxTrans = GameObject.Find("TextBoxDARK").GetComponent<RectTransform>();
-        image = GetComponent<Image>();
-        DarkBoxImage = GameObject.Find("TextBoxDARK").GetComponent<Image>();
-        animator = GameObject.Find("TextBox").GetComponent<Animator>();
-        animator.enabled = false;
-        sound1 = GetComponent<AudioSource>();
-        sound2 = gameObject.AddComponent<AudioSource>();
-        sound2.playOnAwake = false;
-        sound2.clip = sound2clip;
-        sound3 = gameObject.AddComponent<AudioSource>();
-        sound3.playOnAwake = false;
-        sound3.clip = sound3clip;
-        sound4 = GameObject.Find("Press Start!").GetComponent<AudioSource>();
-        FileText = GameObject.Find("FileText").GetComponent<TextMeshProUGUI>();
-        aniamtor2 = GameObject.Find("FileParent").GetComponent<AudioSource>();
-        CameraAnimator = GameObject.Find("Main Camera").GetComponent<Animator>();
-        fadeScript = GameObject.Find("fadeout").GetComponent<fade>();
-        FileParentTrans = aniamtor2.gameObject.GetComponent<RectTransform>();
+        // 2024 note: im not even gonna begin to sort these. what the fuck man.
+        _transform = GetComponent<RectTransform>();
+        _text = GameObject.Find("FileNameText").GetComponent<TextMeshProUGUI>();
+        _lightBoxTransform = GameObject.Find("TextBox").GetComponent<RectTransform>();
+        _darkBoxTransform = GameObject.Find("TextBoxDARK").GetComponent<RectTransform>();
+        _image = GetComponent<Image>();
+        _darkImage = _darkBoxTransform.GetComponent<Image>();
+        _animator = _lightBoxTransform.GetComponent<Animator>();
+        _animator.enabled = false;
+        _audioSource1 = GetComponent<AudioSource>();
+        _audioSource2 = gameObject.AddComponent<AudioSource>();
+        _audioSource2.playOnAwake = false;
+        _audioSource2.clip = _audioClip2;
+        _audioSource3 = gameObject.AddComponent<AudioSource>();
+        _audioSource3.playOnAwake = false;
+        _audioSource3.clip = _audioClip3;
+        _audioSource4 = GameObject.Find("PressStart").GetComponent<AudioSource>();
+        _fileText = GameObject.Find("FileText").GetComponent<TextMeshProUGUI>();
+        _audioSource5 = GameObject.Find("FileParent").GetComponent<AudioSource>();
+        _cameraAnimator = Camera.main.GetComponent<Animator>();
+        _fader = GameObject.Find("fadeout").GetComponent<Fader>();
+        _fileParentTransform = _audioSource5.gameObject.GetComponent<RectTransform>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        trans.localPosition = new Vector3(x * 14 - 99.5f, y * 18.7f + 56); //set position
+        _transform.localPosition = new Vector3(_x * 14.0f - 99.5f, _y * 18.7f + 56.0f); //set position
 
         //Move
-        if (LightBoxTrans.localPosition.y < 8 && !AlphaReady) //make sure its fully faded in
+        if (_lightBoxTransform.localPosition.y < 8.0f && !_alphaReady) //make sure its fully faded in
         {
+            float horizontal = Input.GetButtonDown("Left") ? -1.0f : (Input.GetButtonDown("Right") ? 1.0f : 0.0f);
+            float vertical = Input.GetButtonDown("Down") ? 1.0f : (Input.GetButtonDown("Up") ? -1.0f : 0.0f);
+            if (horizontal != 0.0f)
+            {
+                if (horizontal < 0.0f && _x == 1) return;
+                else if (horizontal > 0.0f && _x == 13) return;
 
-            if (Input.GetKeyDown(KeyCode.LeftArrow) && x != 1)
-            {
-                --x; //left
-                sound1.Play(); //play whom sound
+                _x += horizontal > 0.0f ? 1 : -1;
+                _audioSource1.PlayOneShot(_audioSource1.clip);
             }
-            if (Input.GetKeyDown(KeyCode.RightArrow) && x != 13)
+            else if (vertical != 0.0f)
             {
-                ++x; //right
-                sound1.Play();
-            }
-            if (Input.GetKeyDown(KeyCode.UpArrow) && y != -1)
-            {
-                ++y; //up
-                sound1.Play();
-            }
-            if (Input.GetKeyDown(KeyCode.DownArrow) && y != -6)
-            {
-                --y; //down
-                sound1.Play();
-            }
+                if (vertical < 0.0f && _y == -1) return;
+                else if (vertical > 0.0f && _y == -6) return;
 
-            test = characters[Mathf.Abs(y) - 1, x - 1];
-            test2 = text.renderedWidth;
+                _y += vertical > 0.0f ? -1 : 1;
+                _audioSource1.PlayOneShot(_audioSource1.clip);
+            }
 
             //enter character
-            if(Input.GetKeyDown(KeyCode.Z))
+            if(Input.GetButtonDown("Select"))
             {
-                if(characters[Mathf.Abs(y) - 1, x - 1] != "dummy")
+                if(characters[Mathf.Abs(_y) - 1, _x - 1] != "dummy")
                 {
-                    if(text.renderedWidth < 80) text.text += characters[Mathf.Abs(y) - 1, x - 1];
-                } else text.text = text.text.Substring(0, text.text.Length - 1);
+                    if(_text.renderedWidth < 80)
+                        _text.text += characters[Mathf.Abs(_y) - 1, _x - 1];
+                }
+                else
+                    _text.text = _text.text.Substring(0, _text.text.Length - 1);
+
+                _fileText.text = _text.text;
             }
 
-            if (Input.GetKeyDown(KeyCode.Return) && !animator.enabled && !AlphaReady)
+            if (Input.GetButtonDown("Start") && !_animator.enabled && !_alphaReady)
             {
                 //finish name
-                if (string.IsNullOrWhiteSpace(text.text) || text.text.ToLower() == "matador") //is it empty? (also cant have two matadors)
+                if (string.IsNullOrWhiteSpace(_text.text) || _text.text.ToLower().Replace(" ", "") == "matador") //is it empty? (also cant have two matadors)
                 {
-                    if (!animator.enabled)
+                    if (!_animator.enabled)
                     {
-                        animator.enabled = true;
-                        animator.Play("shakenamebox", 0, 0);
+                        _animator.enabled = true;
+                        _animator.Play("ShakeNameBox", 0, 0);
                         StartCoroutine(WaitFor(0.5f, "box"));
-                        sound3.Play();
+                        _audioSource3.Play();
                     }
                 } else
                 {
                     //do animations and the save file things pop up and MATADOR exists
-                    AlphaReady = true;
+                    _alphaReady = true;
                     StartCoroutine(WaitFor(1, "move"));
-                    CameraAnimator.Play("MATADOR");
-                    sound4.Play();
+                    _cameraAnimator.Play("MATADOR");
+                    _audioSource4.Play();
                 }
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Return) && LightBoxTrans.localPosition.x < -315 && !VolumeReady)
+        if (Input.GetButtonDown("Start") && _lightBoxTransform.localPosition.x < -315.0f && !_volumeReady)
         {
-            sound2.Play();
-            fadeScript.enabled = true;
-            VolumeReady = true;
+            _audioSource2.Play();
+            _fader.enabled = true;
+            _volumeReady = true;
         }
 
+        if (_nameBoxReady && _lightBoxTransform.localPosition.x > -319.0001f)
+        {
+            _lightBoxTransform.localPosition = Vector3.Lerp(_lightBoxTransform.localPosition, new Vector3(-320.0f, 0.0f, 0.0f), 3.3f * Time.deltaTime);
+            _fileParentTransform.localPosition = Vector3.Lerp(_fileParentTransform.localPosition, new Vector3(0.0f, 0.0f, 0.0f), 3.3f * Time.deltaTime);
+        }
 
-        FileText.text = text.text;
+        if (_alphaReady && _image.color.a > 0.0001f)
+        {
+            _image.color = Color.Lerp(_image.color, new Color(1.0f, 1.0f, 1.0f, 0.0f), 3.3f * Time.deltaTime);
+            _darkImage.color = _image.color;
+        }
+
+        if(_volumeReady && _audioSource5.volume > 0.0f)
+        {
+            _audioSource5.volume -= 1.25f * Time.deltaTime;
+        }
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
-        DarkBoxTrans.position = LightBoxTrans.position;
+        _darkBoxTransform.position = _lightBoxTransform.position;
     }
 
-    void FixedUpdate()
-    {
-        if (NameBoxReady && LightBoxTrans.localPosition.x > -319.0001)
-        {
-            LightBoxTrans.localPosition = Vector3.Lerp(LightBoxTrans.localPosition, new Vector3(-320, 0, 0), 0.066f);
-            FileParentTrans.localPosition = Vector3.Lerp(FileParentTrans.localPosition, new Vector3(0, 0, 0), 0.066f);
-        }
-
-        if (AlphaReady && image.color.a > 0.0001)
-        {
-            image.color = Color.Lerp(image.color, new Color(1, 1, 1, 0), 0.066f);
-            DarkBoxImage.color = image.color;
-        }
-
-        if(VolumeReady && aniamtor2.volume > 0)
-        {
-            aniamtor2.volume -= 0.025f;
-        }
-    }
-
-    IEnumerator WaitFor(float seconds, string method)
+    private IEnumerator WaitFor(float seconds, string method)
     {
         yield return new WaitForSeconds(seconds);
         
         switch(method)
         {
             case "box":
-                animator.enabled = false;
+                _animator.enabled = false;
                 break;
             case "move":
-                NameBoxReady = true;
+                _nameBoxReady = true;
                 break;
         }
     }

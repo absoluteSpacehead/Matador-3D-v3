@@ -365,12 +365,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 135499012}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 328eb165047307c489b9e6ee3671e302, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c8c19e695494c5408be4ed4d6f7351f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeout: 1
-  alpha: 0
-  nextscene: 1
+  DoFadeOut: 1
+  _nextScene: 1
 --- !u!114 &135499015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518,7 +517,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e9d7ad98452a534fa983f5eb047d43a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PressedStart: 0
+  HasPressedStart: 0
 --- !u!82 &182125690
 AudioSource:
   m_ObjectHideFlags: 0
@@ -727,7 +726,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 360, y: 0}
+  m_AnchoredPosition: {x: 320, y: 0}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &382579454
@@ -742,7 +741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c25d57fa45b5f94084e5bd6eacdd892, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: 4051ab5c45bcb28419f64d89f5fbb38a, type: 3}
+  _audioClip: {fileID: 8300000, guid: 4051ab5c45bcb28419f64d89f5fbb38a, type: 3}
 --- !u!82 &382579455
 AudioSource:
   m_ObjectHideFlags: 0
@@ -943,19 +942,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89d7f3f19ec02ee4e982268c76a4acbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: 
-  x: 1
-  y: -1
-  sound2clip: {fileID: 8300000, guid: 236f6ad39eea7794bb6561407f051a07, type: 3}
-  sound3clip: {fileID: 8300000, guid: 4051ab5c45bcb28419f64d89f5fbb38a, type: 3}
-  sound5clip: {fileID: 0}
-  image: {fileID: 0}
-  DarkBoxImage: {fileID: 0}
-  test: 
-  test2: 0
-  NameBoxReady: 0
-  AlphaReady: 0
-  VolumeReady: 0
+  _audioClip2: {fileID: 8300000, guid: 236f6ad39eea7794bb6561407f051a07, type: 3}
+  _audioClip3: {fileID: 8300000, guid: 4051ab5c45bcb28419f64d89f5fbb38a, type: 3}
 --- !u!82 &414739903
 AudioSource:
   m_ObjectHideFlags: 0

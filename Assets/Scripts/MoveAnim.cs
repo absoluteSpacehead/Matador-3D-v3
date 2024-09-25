@@ -2,40 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator), typeof(SpriteRenderer))]
 public class MoveAnim : MonoBehaviour
 {
 
-    Animator animator;
-    SpriteRenderer renderer;
-    public Sprite image;
-    Menu menu;
+    private Animator _animator;
+    private SpriteRenderer _spriteRenderer;
+    public Sprite StandImage;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        animator = GetComponent<Animator>();
-        renderer = GetComponent<SpriteRenderer>();
-        menu = GameObject.Find("menu").GetComponent<Menu>();
+        _animator = GetComponent<Animator>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (!menu.menuOpen)
+        if (Input.GetAxisRaw("Horizontal") != 0.0f || Input.GetAxisRaw("Vertical") != 0.0f)
         {
-            if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
-            {
-                if (!animator.enabled) animator.enabled = true;
-            }
-            else
-            {
-                animator.enabled = false;
-                renderer.sprite = image;
-            }
-        } else
+            if (!_animator.enabled)
+                _animator.enabled = true;
+        }
+        else
         {
-            animator.enabled = false;
-            renderer.sprite = image;
+            _animator.enabled = false;
+            _spriteRenderer.sprite = StandImage;
         }
     }
 }

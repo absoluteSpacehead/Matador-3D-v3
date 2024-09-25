@@ -6,22 +6,14 @@ using UnityEngine;
 
 public class LookAtCamera : MonoBehaviour
 {
-
-    GameObject cam;
-
-    // Start is called before the first frame update
-    void Start()
+    private void Update()
     {
-        cam = GameObject.Find("Main Camera");
-    }
+        if (!Camera.main)
+            return;
 
-    // Update is called once per frame
-    void Update()
-    {
-        Vector3 pos = cam.transform.position - transform.position;
-        pos.x = 0;
-        pos.z = 0;
-        transform.LookAt(cam.transform.position - pos);
-        transform.localRotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y - 180, 0);
+        float target = Camera.main.transform.position.y - transform.position.y;
+
+        transform.LookAt(Camera.main.transform.position - new Vector3(0.0f, target, 0.0f));
+        transform.localEulerAngles = new Vector3(0, transform.rotation.eulerAngles.y - 180, 0);
     }
 }

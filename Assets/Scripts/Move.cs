@@ -2,70 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class Move : MonoBehaviour
 {
+    private AudioSource _audioSource;
 
-    public float speed;
-    AudioSource src;
-    Menu menu;
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        src = GetComponent<AudioSource>();
-        menu = GameObject.Find("menu").GetComponent<Menu>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    private void Update()
     {
-        if (!menu.menuOpen)
-        {
-            transform.Translate(new Vector3((0.05f * Input.GetAxisRaw("Horizontal")), 0, (0.05f * Input.GetAxisRaw("Vertical"))));
+        transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal"), 0.0f, Input.GetAxisRaw("Vertical")).normalized * 2.5f * Time.deltaTime);
 
-            /*if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
-            {
-                if (speed < 1)
-                {
-                    speed += 0.2f;
-                }
-                else
-                {
-                    speed = 1;
-                }
-            }
-            else
-            {
-                if (speed > 0)
-                {
-                    speed -= 0.2f;
-                }
-                else
-                {
-                    speed = 0;
-                }
-            }*/
-
-            if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
-            {
-                if (src.volume != 1)
-                {
-                    src.volume += 0.2f;
-                }
-            }
-            else
-            {
-                if (src.volume != 0)
-                {
-                    src.volume -= 0.2f;
-                }
-            }
-        } else
+        if (Input.GetAxisRaw("Horizontal") != 0.0f || Input.GetAxisRaw("Vertical") != 0.0f)
         {
-            if (src.volume != 0)
-            {
-                src.volume -= 0.2f;
-            }
+            if (_audioSource.volume != 1.0f)
+                _audioSource.volume = Mathf.Clamp(_audioSource.volume + (10.0f * Time.deltaTime), 0.0f, 1.0f);
+        }
+        else
+        {
+            if (_audioSource.volume != 0.0f)
+                _audioSource.volume = Mathf.Clamp(_audioSource.volume - (10.0f * Time.deltaTime), 0.0f, 1.0f);
         }
     }
 }

@@ -2,39 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(RectTransform), typeof(AudioSource))]
 public class MatadorMusicMenu : MonoBehaviour
 {
-
-    RectTransform trans;
-    AudioSource audiosrc;
-    AudioSource audiosrc2;
-    public AudioClip clip;
-    bool Playing;
+    private RectTransform _transform;
+    private AudioSource _audioSource;
+    private AudioSource _audioSource2;
+    public AudioClip _audioClip;
+    private bool _isPlaying;
 
     // Start is called before the first frame update
     void Start()
     {
-        trans = GetComponent<RectTransform>();
-        audiosrc = GetComponent<AudioSource>();
-        audiosrc2 = gameObject.AddComponent<AudioSource>();
-        audiosrc2.playOnAwake = false;
-        audiosrc2.clip = clip;
+        _transform = GetComponent<RectTransform>();
+        _audioSource = GetComponent<AudioSource>();
+        _audioSource2 = gameObject.AddComponent<AudioSource>();
+        _audioSource2.playOnAwake = false;
+        _audioSource2.clip = _audioClip;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(trans.localPosition.x < 50 && !Playing)
+        if(_transform.localPosition.x < 50 && !_isPlaying)
         {
-            Playing = true;
-            audiosrc.Play();
+            _isPlaying = true;
+            _audioSource.Play();
         }
 
-        if (trans.localPosition.x < 50 && audiosrc.volume == 1)
+        if (_transform.localPosition.x < 50 && _audioSource.volume == 1)
         {
-            if(Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
+            if(Input.GetAxisRaw("Vertical") != 0.0f)
             {
-                audiosrc2.Play();
+                _audioSource2.PlayOneShot(_audioSource2.clip);
             }
         }
     }
