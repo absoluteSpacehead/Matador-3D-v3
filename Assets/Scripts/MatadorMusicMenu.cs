@@ -32,7 +32,7 @@ public class MatadorMusicMenu : MonoBehaviour
 
         if (_transform.localPosition.x < 50 && _audioSource.volume == 1)
         {
-            if(Input.GetAxisRaw("Vertical") != 0.0f)
+            if(Input.GetButtonDown("Vertical"))
             {
                 _audioSource2.PlayOneShot(_audioSource2.clip);
             }
