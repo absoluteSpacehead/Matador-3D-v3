@@ -69,6 +69,15 @@ public class EnterText : MonoBehaviour
         _fileParentTransform = _audioSource5.gameObject.GetComponent<RectTransform>();
     }
 
+    private void DoBackspace()
+    {
+        if (_text.text.Length == 0) return;
+
+        _text.text = _text.text.Substring(0, _text.text.Length - 1);
+
+        _fileText.text = _text.text;
+    }
+
     private void Update()
     {
         _transform.localPosition = new Vector3(_x * 14.0f - 99.5f, _y * 18.7f + 56.0f); //set position
@@ -76,6 +85,7 @@ public class EnterText : MonoBehaviour
         //Move
         if (_lightBoxTransform.localPosition.y < 8.0f && !_alphaReady) //make sure its fully faded in
         {
+            // 2025 note: what is this dawg
             float horizontal = Input.GetButtonDown("Left") ? -1.0f : (Input.GetButtonDown("Right") ? 1.0f : 0.0f);
             float vertical = Input.GetButtonDown("Down") ? 1.0f : (Input.GetButtonDown("Up") ? -1.0f : 0.0f);
             if (horizontal != 0.0f)
@@ -96,18 +106,22 @@ public class EnterText : MonoBehaviour
             }
 
             //enter character
-            if(Input.GetButtonDown("Select"))
+            if (Input.GetButtonDown("Select"))
             {
-                if(characters[Mathf.Abs(_y) - 1, _x - 1] != "dummy")
+                if (characters[Mathf.Abs(_y) - 1, _x - 1] != "dummy")
                 {
-                    if(_text.renderedWidth < 80)
+                    if (_text.renderedWidth < 80)
+                    {
                         _text.text += characters[Mathf.Abs(_y) - 1, _x - 1];
+                        _fileText.text = _text.text;
+                    }
                 }
                 else
-                    _text.text = _text.text.Substring(0, _text.text.Length - 1);
-
-                _fileText.text = _text.text;
+                    DoBackspace();
             }
+
+            if (Input.GetButtonDown("Back"))
+                DoBackspace();
 
             if (Input.GetButtonDown("Start") && !_animator.enabled && !_alphaReady)
             {
@@ -132,11 +146,17 @@ public class EnterText : MonoBehaviour
             }
         }
 
-        if (Input.GetButtonDown("Start") && _lightBoxTransform.localPosition.x < -315.0f && !_volumeReady)
+        // why in the FUCK is this handled here
+        if (_lightBoxTransform.localPosition.x < -315.0f && !_volumeReady)
         {
-            _audioSource2.Play();
-            _fader.enabled = true;
-            _volumeReady = true;
+            if (Input.GetButtonDown("Start") || Input.GetButtonDown("Select"))
+            {
+                _audioSource2.Play();
+                _fader.enabled = true;
+                _volumeReady = true;
+            }
+            else if (Input.GetButtonDown("Back"))
+                _audioSource3.Play();
         }
 
         if (_nameBoxReady && _lightBoxTransform.localPosition.x > -319.0001f)
